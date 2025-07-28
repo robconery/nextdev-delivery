@@ -10,7 +10,7 @@ const firebaseConfig = {
     client_email: "firebase-adminsdk-fbsvc@the-next-dev.iam.gserviceaccount.com",
     projectId: "the-next-dev"
   }),
-  storageBucket: "the-next-dev.appspot.com",
+  storageBucket: "the-next-dev.firebasestorage.app",
 };
 
 admin.initializeApp(firebaseConfig);
