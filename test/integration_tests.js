@@ -89,24 +89,6 @@ describe("Integration Tests", () => {
       console.log(`✓ Size: ${result.fulfillment.size}`);
       console.log(`✓ Order number: ${result.fulfillment.number}`);
     });
-
-    it("should have sent email notification", async function() {
-      // The fulfillment process should have updated the checkout session with email metadata
-      const updatedCheckout = await getCheckout(testCheckoutId);
-      
-      // Check if metadata indicates email was sent
-      if (updatedCheckout.metadata) {
-        console.log(`✓ Checkout metadata updated:`, updatedCheckout.metadata);
-        
-        if (updatedCheckout.metadata.emailSent) {
-          console.log(`✓ Email sent at: ${updatedCheckout.metadata.emailSent}`);
-        }
-        
-        if (updatedCheckout.metadata.fulfilled) {
-          console.log(`✓ Fulfillment marked as complete: ${updatedCheckout.metadata.fulfilled}`);
-        }
-      }
-    });
   });
 
   describe("Download Link Expiration", () => {

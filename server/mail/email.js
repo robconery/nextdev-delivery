@@ -5,12 +5,9 @@ import ejs from 'ejs';
 import MarkdownIt from 'markdown-it';
 import frontMatter from 'front-matter';
 import nodemailer from 'nodemailer';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { templates } from './templates.js';
+import { layout } from './layout.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const md = MarkdownIt();
 
 const tsp = nodemailer.createTransport({
@@ -29,30 +26,14 @@ export class Email {
     assert(args.template, "Need a template");
     assert(args.email, "Need an email please");
 
-    this.template = `${args.template}.md`;
+    this.template = args.template;
     this.data = args.data || null;
     this.email = args.email;
   }
-  static async sendErrorToRob(err) {
-    try {
-      const ctx = err.data ? JSON.stringify(err.data) : "--";
-      await new Email({
-        email: "rob@bigmachine.io",
-        template: "error",
-        data: {
-          message: err.message,
-          stack: err.stack,
-          context: JSON.stringify(ctx),
-        },
-      }).send();
-    } catch (err) {
-      console.error(err);
-      //swallow this so we don't get recursion
-    }
-  }
+
   async render() {
-    const templateFile = path.resolve(__dirname, this.template);
-    const template = fs.readFileSync(templateFile, "utf-8");
+    const template = templates[this.template];
+    assert(template, `Template '${this.template}' not found`);
 
     // First render with EJS to process the data
     const renderOne = ejs.render(template, this.data || {});
@@ -64,9 +45,6 @@ export class Email {
       mattered.attributes.subject,
       "Can't send an email without a subject"
     );
-    
-    const layoutFile = path.resolve(__dirname, "layout.ejs");
-    const layout = fs.readFileSync(layoutFile, "utf-8");
 
     // Convert markdown body to HTML
     const body = md.render(mattered.body);

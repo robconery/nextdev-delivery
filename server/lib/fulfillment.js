@@ -1,6 +1,5 @@
 import assert from 'assert';
 import {getDownloadUrl}  from './firebase.js';
-import { Email } from '../mail/index.js';
 import {updateCheckout, getCheckout} from './stripe.js';
 class fulfillment {
   constructor(checkout) {
