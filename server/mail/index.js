@@ -7,11 +7,26 @@ export { Email };
 
 export const sendDownloadEmail = async function (email, { courses, downloads }) {
   return new Email({
-    template: "downloads",
+    template: "download-template",
     data: {
-      email,
-      courses,
-      downloads,
+      data: {
+        email,
+        courses,
+        downloads,
+      }
+    },
+    email: email,
+  }).send();
+};
+
+export const sendAIDeadlinesEmail = async function (email, checkoutData) {
+  return new Email({
+    template: "ai-deadlines-personal",
+    data: {
+      data: {
+        download_url: checkoutData.download_url,
+        checkout: checkoutData.checkout
+      }
     },
     email: email,
   }).send();
@@ -24,9 +39,11 @@ export const sendRobError = async function (
   return new Email({
     template: "error",
     data: {
-      message: err.message,
-      stack: err.stack,
-      context: JSON.stringify(ctx),
+      data: {
+        message: err.message,
+        stack: err.stack,
+        context: JSON.stringify(ctx),
+      }
     },
     email: "rob@bigmachine.io",
   }).send();

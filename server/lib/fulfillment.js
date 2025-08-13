@@ -21,6 +21,7 @@ class fulfillment {
     
     this.checkout.fulfillment = {
       file: this.checkout.product.metadata.file,
+      sku: this.checkout.product.metadata.sku,
       number: this.checkout.number,
       size: this.checkout.product.metadata.size || "0",
       description:
@@ -32,10 +33,10 @@ class fulfillment {
     );
 
     const email = new Email({
-      template: "checkout",
+      template: this.checkout.fulfillment.sku,
       email: this.checkout.customer_details.email,
       data: {
-        checkout: this.checkout
+        data: {checkout: this.checkout}
       },
     });
 

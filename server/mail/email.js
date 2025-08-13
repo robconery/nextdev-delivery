@@ -7,7 +7,10 @@ import frontMatter from 'front-matter';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
-import {checkoutTemplate, layout} from "../mail/templates.js";
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const md = MarkdownIt();
 
 const tsp = nodemailer.createTransport({
@@ -16,7 +19,7 @@ const tsp = nodemailer.createTransport({
   secure: true,
   pool: true,
   auth: {
-    user: "mg.bigmachine.io",
+    user: "mail@mg.bigmachine.io",
     pass: process.env.MAILGUN_API_KEY,
   },
 });
@@ -48,33 +51,35 @@ export class Email {
     }
   }
   async render() {
+    const templateFile = path.resolve(__dirname, this.template);
+    const template = fs.readFileSync(templateFile, "utf-8");
 
-    // const templateFile = path.resolve(__dirname, "templates", this.template);
-    // const template = fs.readFileSync(templateFile, "utf-8");
-    //const template = await db.findOne("mail_templates", "name", this.template);
+    // First render with EJS to process the data
+    const renderOne = ejs.render(template, this.data || {});
     
-    let renderOne, mattered;
-    renderOne = ejs.render(checkoutTemplate, this.data);
-    //try{
-    mattered = frontMatter(renderOne);
+    // Parse front matter
+    const mattered = frontMatter(renderOne);
 
     assert(
       mattered.attributes.subject,
       "Can't send an email without a subject"
     );
-    // const layoutFile = path.resolve(__dirname, "../mail/layout.ejs");
-    // const layout = fs.readFileSync(layoutFile, "utf-8");
+    
+    const layoutFile = path.resolve(__dirname, "layout.ejs");
+    const layout = fs.readFileSync(layoutFile, "utf-8");
 
+    // Convert markdown body to HTML
     const body = md.render(mattered.body);
+    
+    // Render the final email with layout
     const renderThree = ejs.render(layout, {
       data: {
         body: body,
-        //preheader: mattered.data.subject
+        preheader: mattered.attributes.subject || ""
       },
     });
+    
     this.body = renderThree;
-    //we now have the body HTML, let's pop it into a nice layout
-
     this.subject = mattered.attributes.subject;
   }
   async send() {
@@ -84,7 +89,7 @@ export class Email {
       console.log("Sending", this.template, "to", this.email);
 
       this.response = await tsp.sendMail({
-        from: "Rob Conery <me@robconery.com>", // sender address
+        from: "Rob Conery <rob@bigmachine.io>", // sender address
         to: this.email, // list of receivers
         subject: this.subject, // Subject line
         html: this.body, // html body
