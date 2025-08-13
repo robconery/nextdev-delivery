@@ -10,8 +10,9 @@ export default defineEventHandler(async (event) => {
   const stripeEvent = await validateWebhook(event);
   if(stripeEvent.error) {
     //return a 400 error
-    setResponseStatus(event, 400);
-    return { error: stripeEvent.error };
+    console.error(stripeEvent.error);
+    setResponseStatus(event, 400, "Webhook Error: " + stripeEvent.error.message);
+    return stripeEvent.error.message;
   }
 
   switch (stripeEvent.type) {
