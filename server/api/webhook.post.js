@@ -1,7 +1,7 @@
 import { defineEventHandler, readBody, readRawBody } from "h3";
 import Fulfillment from "../lib/fulfillment";
 import { validateWebhook, getCheckout } from "../lib/stripe";
-import { Email } from "../mail/index.js";
+import { Email } from "../mail/email.js";
 
 const config = useRuntimeConfig();
 

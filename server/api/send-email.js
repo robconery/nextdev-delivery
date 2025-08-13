@@ -1,6 +1,6 @@
 import {getCheckout} from "../lib/stripe.js";
 import {getDownloadUrl}  from '../lib/firebase.js';
-import { Email } from '../mail/index.js';
+import { Email } from '../mail/email.js';
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const { id } = body;
