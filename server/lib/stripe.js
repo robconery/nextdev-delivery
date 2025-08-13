@@ -49,7 +49,7 @@ export const validateWebhook = async (event) => {
     const stripeEvent = stripe.webhooks.constructEvent(
       body,
       signature,
-      "whsec_3OfmLq1kmtH3p86kh51jVknYKTxdZsS6"
+      process.env.STRIPE_WEBHOOK_SECRET
     );
     return stripeEvent;
   } catch (err) {
