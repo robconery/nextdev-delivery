@@ -86,7 +86,7 @@ export const getCheckout = async (id) => {
       + session.id.slice(-8);
     return session;
   } catch (error) {
-    console.error('Error retrieving checkout session:', session.id);
+    console.error('Error retrieving checkout session:', id);
     throw error;
   }
 }
