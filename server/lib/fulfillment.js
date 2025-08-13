@@ -32,16 +32,6 @@ class fulfillment {
       this.checkout.fulfillment.file
     );
 
-    const email = new Email({
-      template: this.checkout.fulfillment.sku,
-      email: this.checkout.customer_details.email,
-      data: {
-        data: {checkout: this.checkout}
-      },
-    });
-
-    await email.send();
-
     await updateCheckout(this.checkout.id, {
       metadata: {
         emailSent: new Date().toISOString(),
