@@ -1,4 +1,7 @@
 import { defineEventHandler, readBody, readRawBody } from "h3";
+//dotenv 
+import dotenv from 'dotenv';
+dotenv.config();
 import Fulfillment from "../lib/fulfillment";
 import { validateWebhook, getCheckout } from "../lib/stripe";
 import { Email } from "../mail/email.js";
