@@ -39,9 +39,9 @@ export default defineEventHandler(async (event) => {
         await email.send();
         console.log("Email sent successfully for checkout:", checkout.id);
         //if the metadat has a key called "kit", then subscribe to ConvertKit
-        if (checkout.metadata.kit) {
+        if (checkout.product.metadata.kit) {
           await recordPurchase(checkout, [{
-            sku: checkout.metadata.kit,
+            sku: checkout.product.metadata.kit,
             name: checkout.product.name,
             price: checkout.total,
             quantity: 1
