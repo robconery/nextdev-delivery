@@ -2,6 +2,7 @@ import { defineEventHandler, readBody, readRawBody } from "h3";
 import Fulfillment from "../lib/fulfillment";
 import { validateWebhook, getCheckout } from "../lib/stripe";
 import { Email } from "../mail/email.js";
+import { subscribe, recordPurchase } from "../lib/convertkit";
 
 const config = useRuntimeConfig();
 
@@ -21,15 +22,34 @@ export default defineEventHandler(async (event) => {
     // Then define and call a function to handle the event checkout.session.completed
       const fulfillment = await Fulfillment.fromCheckout(session.id);
       const checkout = await fulfillment.go();
-      const email = new Email({
-        template: checkout.fulfillment.sku,
-        email: checkout.customer_details.email,
-        data: {
-          data: {checkout}
-        },
-      });
-  
-      await email.send();
+      
+      try{
+        //send a thank you
+        const email = new Email({
+          template: checkout.fulfillment.sku,
+          email: checkout.customer_details.email,
+          data: {
+            data: {checkout}
+          },
+        });
+    
+        await email.send();
+
+        //if the metadat has a key called "kit", then subscribe to ConvertKit
+        if (checkout.metadata.kit) {
+          await recordPurchase(checkout, [{
+            sku: checkout.metadata.kit,
+            name: checkout.product.name,
+            price: checkout.total,
+            quantity: 1
+          }]);
+        }
+      }catch (error) {
+        console.error("Error sending email or recording purchase:", error);
+      }
+
+      console.log("Fulfillment completed for checkout:", checkout.id);
+
       break;
     default:
       console.log(`Unhandled event type ${stripeEvent.type}`);
