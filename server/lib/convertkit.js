@@ -43,6 +43,7 @@ export const recordPurchase = async function(checkout, products){
       "quantity": item.quantity || 1
     })
   }
+  console.log("Recording purchase in ConvertKit:", payload);
   await post("purchases",payload);
   return true;
 }
