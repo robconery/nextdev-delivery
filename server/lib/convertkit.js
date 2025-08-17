@@ -8,7 +8,7 @@ if (!secret) {
 
 const post = function(stub, data={}){
   data.api_secret = secret;
-  const url = `https://api.convertkit.com/v4/${stub}`
+  const url = `https://api.convertkit.com/v3/${stub}`
   const config = {
     headers: {
       'Content-Type': 'application/json;charset=UTF-8',
