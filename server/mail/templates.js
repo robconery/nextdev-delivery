@@ -10,6 +10,11 @@ You are about to embark on an wild journey that is hopefully fun, and empowering
  - Speaking of issues: there is a GitHub link in the PDF, [or you can just click here](https://github.com/robconery/ai-intro-workshop).
  - You can also reply to this email and I'll get right back to you.
 
+## Downloading Again
+You can always return to [your confirmation page](https://app.thenext.dev/checkout/thanks?id=<%=data.checkout.id%>) to get access to your purchase.
+
+If you have any trouble, just reply to this email and I'll get right back to you.
+
 <%if(data.checkout.invoice_url) {%>
 
 ## Your Invoice
@@ -44,6 +49,18 @@ Take the time to look over the Extra content in the "/extras" directory, as you 
  - Guidance on handling skepticism and hesitance. It _will_ happen on teams of any size. AI is a snark magnet.
  - Rollout and measurement guides. AI comes with a lot of promises, but facts and numbers will save the day.
  - The policies. Your team will need to understand what's expected ASAP.
+
+## Licensing
+
+This workshop is licensed to you, individually, to use for yourself, your team, or your company. Please don't put it online and resell the content. I thought about coming up with a stricter license but I figure that I'll go with the honor system here.
+
+If you change jobs, make them pay for a new license :). You're a good persona and I'm going to trust your judgment.
+
+## Downloading Again
+You can always return to [your confirmation page](https://app.thenext.dev/checkout/thanks?id=<%=data.checkout.id%>) to get access to your purchase.
+
+If you have any trouble, just reply to this email and I'll get right back to you.
+
 
 <%if(data.checkout.invoice_url) {%>
 
