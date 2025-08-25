@@ -29,7 +29,9 @@ export default defineEventHandler(async (event) => {
   const email = new Email({
     template: "checkout",
     email: checkout.customer_details.email,
-    payload
+    data: {
+      data: {checkout}
+    },
   });
   await email.send();
   return { success: true };

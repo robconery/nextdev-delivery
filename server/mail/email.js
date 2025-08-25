@@ -29,6 +29,7 @@ export class Email {
     this.template = args.template;
     this.data = args.data || null;
     this.email = args.email;
+
   }
 
   async render() {
