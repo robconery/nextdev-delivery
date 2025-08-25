@@ -25,6 +25,7 @@ export default defineEventHandler(async (event) => {
   );
   console.log('Fulfillment info:', checkout.fulfillment);
   const payload = {data: checkout};
+  console.log('Payload prepared:', payload);
   const email = new Email({
     template: "checkout",
     email: checkout.customer_details.email,
