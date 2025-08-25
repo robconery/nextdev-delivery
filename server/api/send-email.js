@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   if (!checkout) {
     return sendError(event, createError({ statusCode: 404, statusMessage: 'Checkout not found' }));
   }
-
+  console.log('Checkout found:', checkout.id);
   checkout.fulfillment = {
     file: checkout.product.metadata.file,
     number: checkout.number,
@@ -23,13 +23,12 @@ export default defineEventHandler(async (event) => {
   checkout.fulfillment.download_url = await getDownloadUrl(
     checkout.fulfillment.file
   );
-
+  console.log('Fulfillment info:', checkout.fulfillment);
+  const payload = {data: checkout};
   const email = new Email({
     template: "checkout",
     email: checkout.customer_details.email,
-    data: {
-      checkout: checkout
-    },
+    payload
   });
   await email.send();
   return { success: true };
